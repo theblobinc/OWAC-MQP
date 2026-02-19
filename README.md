@@ -1,3 +1,4 @@
+![Project Logo](docs/Data-Diode.png)
 ````markdown
 # OWAC-MQP — One-Way Audio Control & Media Queue Protocol
 
