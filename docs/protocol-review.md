@@ -4,7 +4,7 @@ This note summarizes the current unified protocol spec in practical terms.
 
 ## Bottom line
 
-OWAC-MQP gives us a one-way, air-gap-friendly command channel from a trusted control workstation to an internet-facing media node over plain analog audio. The protocol is designed so that commands execute only when they are authentic, fresh, and policy-compliant. If anything is ambiguous or malformed, the receiver rejects the message and records telemetry.
+OWAC-MQP gives us a one-way, air-gap-friendly command channel from a trusted control workstation to an internet-facing media node over plain analog audio. The protocol is designed so that commands execute only when they are authentic, fresh, and policy-compliant. If anything is ambiguous or malformed, the receiver rejects the message and records telemetry. 
 
 ## What value we get
 
@@ -44,26 +44,6 @@ OWAC-MQP gives us a one-way, air-gap-friendly command channel from a trusted con
 - We should enforce strict command allow-lists and bounded argument schemas.
 - We should monitor pilot/fault/reject metrics as security signals, not only reliability signals.
 - We should keep profile selection static and explicit (out-of-band), with conformance tests based on golden vectors.
-
-## Strength against quantum-resilient attacks
-
-Short answer: **strong by design for authenticity**, assuming correct implementation and key management.
-
-- The protocol defaults to post-quantum signature options (ML-DSA-65 and SLH-DSA-SHA2-128s) so command acceptance is not dependent on classical RSA/ECC assumptions.
-- Security still depends on basics: private key protection, strict allow-listing, anti-replay state persistence, and deterministic parser correctness.
-- The channel remains plaintext, so even with PQ signatures, observers can still learn command intent.
-- Availability is unchanged by PQ crypto: a jammer can still deny the channel.
-
-## Strength against “extra-dimensional”/unknown-physics attackers
-
-If we model this as an attacker with unusual capabilities to inject or manipulate the signal, the protocol still gives useful guardrails:
-
-- **Integrity/authenticity guardrail**: manipulated data should fail signature/MAC verification unless the attacker can forge valid authenticator bytes.
-- **Replay guardrail**: captured valid messages should fail monotonic replay checks once already accepted.
-- **Fail-closed guardrail**: malformed/ambiguous payloads are rejected, not interpreted.
-- **Observability guardrail**: pilot and reject metrics can expose anomalous interference patterns.
-
-But no protocol can promise security against a truly unconstrained adversary that can break cryptography, alter stored state undetectably, or control endpoints directly. In that extreme model, the right strategy is layered defense: hardware roots of trust, offline key ceremonies, immutable audit trails, independent monitoring, and operational kill-switches.
 
 ## Why this is a good fit for us
 
