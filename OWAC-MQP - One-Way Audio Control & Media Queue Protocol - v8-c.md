@@ -47,6 +47,7 @@ This unified document consolidates:
 - [1. Notation and Conventions](#1-notation-and-conventions)
 - [2. System Model](#2-system-model)
 - [3. Threat Model and Security Goals](#3-threat-model-and-security-goals)
+  - [3.4 PQ Resilience and Extreme-Adversary Limits](#34-pq-resilience-and-extremeadversary-limits)
 - [4. Protocol Stack Overview](#4-protocol-stack-overview)
 - [5. Physical Layer (Frozen Profile OWAC-PHY-AUD-A)](#5-physical-layer-frozen-profile-owacphy-aud-a)
 - [6. Modem and Link Layer (Frozen)](#6-modem-and-link-layer-frozen)
@@ -142,6 +143,18 @@ The receiver must assume:
 - **G3: Replay Resistance:** receiver-enforced monotonic acceptance.
 - **G4: Fail-Closed Under Uncertainty:** reject ambiguous/invalid input.
 - **G5: Observability:** interference/tamper becomes visible.
+
+## 3.4 PQ Resilience and Extreme-Adversary Limits
+
+OWAC-MQP is designed to preserve **authenticated execution** in the presence of foreseeable classical and quantum-capable adversaries by defaulting to post-quantum signature profiles (see §9). This protects command integrity and origin authenticity so long as private keys remain protected and verification implementations are correct.
+
+At the same time, the following limits are explicit and intentional:
+
+- The protocol does **not** provide confidentiality; audio transmissions are observable plaintext.
+- The protocol does **not** guarantee availability under sustained jamming or physical-channel disruption.
+- No protocol can guarantee security against a truly unconstrained adversary that can break cryptographic assumptions, undetectably rewrite persistent replay state, or directly compromise trusted endpoints.
+
+Accordingly, deployments with elevated assurance requirements **SHOULD** layer additional controls (for example: hardware roots of trust, offline key ceremonies, immutable audit logs, and independent monitoring/response paths).
 
 ---
 
